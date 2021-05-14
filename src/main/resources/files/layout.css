@@ -4,12 +4,8 @@ body {
     min-height: 100%;
 }
 
-.seriesmontage {
+.icon {
     height: 30px;
-}
-.eyepic {
-    height: 30px;
-    weight: 30px;
 }
 
 h1 {
@@ -21,5 +17,5 @@ h5 {
     color: dimgray;
 }
 i {
-    color: darkgray;
+    color: dimgray;
 }
