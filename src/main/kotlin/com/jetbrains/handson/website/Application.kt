@@ -4,14 +4,13 @@ import freemarker.cache.*
 import freemarker.core.HTMLOutputFormat
 import io.ktor.application.*
 import io.ktor.freemarker.*
-import io.ktor.html.respondHtml
-import io.ktor.http.HttpStatusCode
+import io.ktor.html.*
+import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.request.receiveParameters
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.html.*
-import org.jetbrains.annotations.NotNull
 
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -28,6 +27,16 @@ fun Application.module() {
         get("/") {
             call.respond(FreeMarkerContent("index.ftl", mapOf("entries" to blogEntries), ""))
         }
+        post ("/remove") {
+            blogEntries.removeLastOrNull()
+            call.respond(FreeMarkerContent("index.ftl", mapOf("entries" to blogEntries), ""))
+        }
+        post ("/modify") {
+            call.respond(FreeMarkerContent("add.ftl", mapOf("entries" to blogEntries), ""))
+        }
+        post ("/add") {
+            call.respond(FreeMarkerContent("add.ftl", mapOf("entries" to blogEntries), ""))
+        }
         post("/submit") {
             val params = call.receiveParameters()
             val headline = params["headline"] ?: return@post call.respond(HttpStatusCode.BadRequest)
@@ -42,7 +51,8 @@ fun Application.module() {
                 newEntry.all.isNotEmpty() &&
                 newEntry.seen.isNotEmpty() &&
                 newEntry.all.toInt() > 0 &&
-                newEntry.seen.toInt() > 0)
+                newEntry.seen.toInt() > 0 &&
+                newEntry.all.toInt() >= newEntry.seen.toInt())
                 {
                     blogEntries.add(0, newEntry)
                     call.respondHtml {
@@ -56,15 +66,18 @@ fun Application.module() {
                                 + " episodes and you have seen "
                                 b { +newEntry.seen }
                             }
-                            p { +"You track ${blogEntries.count()-1} series now!" }
-                            a("/" ) { +"Go back" }
+                            p { +"You track ${blogEntries.count()} series now!" }
+                            a("/" ) { +"Go back to your list" }
                         }
                     }
             }
             else {call.respondHtml {
                 body {
-                    h1 { +"Please fill out all the fields and give positive numbers to the last two of them!" }
-                    b {+"According to your data, these would be the the wanted series' information:"}
+                    h1 { +"Please fill out the fields correctly!:" }
+                    p {i {+"Fill out all of the fields!"}}
+                    p {i {+"Give positive numbers to the last two of them!"}}
+                    p {i {+"The number of the seen episodes should be above the number of all the episodes!"}}
+                    p {b {+"According to your data, these would be the the wanted series' information:"}}
                     p {+"Name of the series: "
                         b { +newEntry.headline }
                     }
@@ -75,7 +88,7 @@ fun Application.module() {
                         b { +newEntry.seen }
                     }
                     p { +"So you still track just ${blogEntries.count()-1} series now!" }
-                    a("/" ) { +"Go back" }
+                    a("/" ) { +"Go back to your list" }
                 }
             }
             }

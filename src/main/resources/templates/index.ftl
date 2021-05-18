@@ -24,26 +24,30 @@
     </nav>
 </header>
 
-    <!--<h1>Series Tracker </h1>-->
-    <!--<img class="seriesmontage" src="/static/filmleader.jpg">-->
-    <hr>
-    <div>
-        <p><i>You can add a new series here!</i></p>
-        <form action="/submit" method="post">
-            <input type="text" name="headline" placeholder="Name of the series">
-            <input type="number" name="all" placeholder="Number of episodes">
-            <input type="number" name="seen" placeholder="Number of seen episodes">
-            <button type="submit">Add</button>
-        </form>
-    </div>
     <hr>
     <h1>List of your series:</h1>
     <p><i>You can track which episodes are the ones, that are just waiting for you to watch them!</i></p>
+
+    <hr>
+
     <#list entries as item>
         <div>
-            <p><b>${item.headline}:</b> out of <b>${item.all}</b> episodes, you have already seen <b>${item.seen}</b>. <button type="button">modify</button> <button type="button">delete</button></p>
+            <p><b>${item.headline}:</b> out of <b>${item.all}</b> episodes, you have already seen <b>${item.seen}</b>.</p>
         </div>
+
     </#list>
+
+    <hr>
+
+    <form action="/add" method="post">
+        <button type="add">add new</button></form>
+    <p></p>
+    <form action="/remove" method="post">
+        <button type="remove">delete oldest</button></form>
+    <p></p>
+    <form action="/modify" method="post">
+        <button type="modify">modify</button></form>
+
     <hr>
 
 </body>

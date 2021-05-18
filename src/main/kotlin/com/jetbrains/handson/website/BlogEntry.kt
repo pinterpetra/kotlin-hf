@@ -1,8 +1,7 @@
 package com.jetbrains.handson.website
 
 
-data class BlogEntry(val headline: String, val all: String, val seen: String){
-
+data class BlogEntry(val headline: String, val all: String, val seen: String,){
 }
 
 val blogEntries = mutableListOf(
@@ -12,3 +11,4 @@ val blogEntries = mutableListOf(
         "this much"
     )
 )
+
