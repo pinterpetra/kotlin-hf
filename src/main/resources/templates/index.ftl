@@ -44,9 +44,6 @@
     <p></p>
     <form action="/remove" method="post">
         <button type="remove">delete oldest</button></form>
-    <p></p>
-    <form action="/modify" method="post">
-        <button type="modify">modify</button></form>
 
     <hr>
 
